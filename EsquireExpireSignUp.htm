@@ -42,6 +42,7 @@ body {
 	<br><br><br><br>Esquire Expire is a chatbot designed to help people keep their food in date. After signing up, you can text <br> the name of a food to Esquire Expire and he will make a note of it for you. When the item <br> is about to go bad you'll get a text from Esquire Expire reminding you along with recipies you can use the food in 
 	</body>
 	
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 	<script>
 	
 	
@@ -53,12 +54,23 @@ body {
 		var phoneNumber = document.getElementById("phoneNumber").value;
 
 		if ((firstName == "") || (phoneNumber == "")) {
-		window.alert("Please enter a first name and phone number");
+			window.alert("Please enter a first name and phone number");
 		} else {
-		window.alert("Hello " + firstName + ", we have sent a code to the number " + phoneNumber + " please reply with 'OK' to confirm sign up");
+			window.alert("Hello " + firstName + ", we have sent a code to the number " + phoneNumber + " please reply with 'OK' to confirm sign up");
+
+			$.ajax({
+				method: 'get',
+				data: {
+
+				},
+				url: 'localhost/register',
+				success: function(result) {
+					console.log(result)
+				}
+			});
 		}
 	}
-</script>
+	</script>
 	
   </div>
 </div>
