@@ -59,11 +59,12 @@ body {
 			window.alert("Hello " + firstName + ", we have sent a code to the number " + phoneNumber + " please reply with 'OK' to confirm sign up");
 
 			$.ajax({
-				method: 'get',
-				data: {
-
-				},
-				url: 'localhost/register',
+				method: 'post',
+				data: JSON.stringify({
+					firstName: firstName,
+					phoneNumber: phoneNumber
+				}),
+				url: 'register',
 				success: function(result) {
 					console.log(result)
 				}

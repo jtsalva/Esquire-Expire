@@ -7,7 +7,6 @@ function register(req, res) {
     const data = JSON.parse(Object.keys(req.body)[0])
     res.status(200);
     res.send("Hello there"); 
-    mongoose.connect("mongodb+srv://scraper:securepassword@cluster0-yvue0.gcp.mongodb.net/userinfo");
 
 
     var conn= mongoose.connection;
