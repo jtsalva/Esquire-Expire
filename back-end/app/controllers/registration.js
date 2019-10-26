@@ -1,6 +1,6 @@
 const superagent = require('superagent')
 const config = require('../../config.js')
-const userInfo = require('../models/userInfo.js')
+const userInfo = require('../models/userinfo.js')
 const mongoose = require('mongoose')
 
 function register(req, res) {
