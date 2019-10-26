@@ -33,8 +33,13 @@ function decideMessageMeaning(message) {
 }
 
 function selectIntent(entities) {
+    console.log(entities);
     if (entities.add) {
         return "add"
+    } else if (entities.show) {
+        return "show"
+    } else if (entities.delete) {
+        return "delete"
     } else {
         return "unknown"
     }
@@ -43,14 +48,20 @@ function selectIntent(entities) {
 function createMessage(intent, value) {
     if (intent == "add") {
         return "<Response><Message>It sounds like you'd like to add a " + value + "</Message></Response>"
+    } else if (intent == "show") {
+        return "<Response><Message>It sounds like you'd like to see all of your food</Message></Response>"
+    } else if (intent == "delete") {
+        return "<Response><Message>It sounds like you'd like to remove your " + value + "</Message></Response>"
     } else {
         return "<Response><Message>I'm sorry I didn't understand. Try again?</Message></Response>"
     }
 }
 
 function getValueForIntent(intent, entities) {
-    if (intent = "add") {
+    if (intent == "add") {
         return entities.add[0].value
+    } else if (intent == "delete") {
+        return entities.delete[0].value
     }
 }
 
