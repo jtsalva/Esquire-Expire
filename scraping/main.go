@@ -39,6 +39,8 @@ func main() {
 	}
 
 	getCategories(categoryUrls)
+
+	insert(items)
 }
 
 func getCategories(categoryUrls []string) {
