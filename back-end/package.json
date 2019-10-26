@@ -19,7 +19,8 @@
   "homepage": "https://github.com/Janshai/HackTheMidlands#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "superagent": "^5.1.0"
+    "superagent": "^5.1.0",
+    "mongoose": "^5.7.7"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
