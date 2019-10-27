@@ -1,3 +1,4 @@
 const mongoose = require('mongoose');
+const config = require('../../config.js');
 
-mongoose.connect("mongodb+srv://scraper:securepassword@cluster0-yvue0.gcp.mongodb.net/test");
+mongoose.connect(config.DBHost + "/test");
