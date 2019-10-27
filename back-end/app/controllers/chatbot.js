@@ -7,12 +7,26 @@ const user_id = 1
 function message(req, res) {
     res.status(200)
     res.set('Content-Type', "text/xml")
+    if (food.getFood().length == 0) {
+        food.loadFood()
+        .then(() => {
+            theRestOfTheMessage(req, res)
+        })
+        .catch(() => {
+            res.send(createMessage("error"))
+        })
+    } else {
+        theRestOfTheMessage(req, res)
+    }
+}
+
+function theRestOfTheMessage(req, res) {
     decideMessageMeaning(req.body.Body)
     .then(response => {
         let intent = selectIntent(response.entities)
         let value = getValueForIntent(intent, response.entities)
         if (intent == "add") {
-            let food_id = food.food.find(element => {return element.name == value}).id
+            let food_id = food.getFood().find(element => {return element.name == value})._id
             food.addFoodForUser(food_id, user_id, success => {
                 if (success) {
                     res.send(createMessage(intent, value))
@@ -43,7 +57,6 @@ function message(req, res) {
     }, error => {
         console.log(error);
     })
-
 }
 
 function decideMessageMeaning(message) {
@@ -101,9 +114,9 @@ function showMessage(foodz) {
     var message = "<Response><Message>Here's all the food I have on record for you:\n\n"
     for (f in foodz) {
         console.log(foodz[f]);
-        let fObj = food.food.find(element => {return element.id == foodz[f].food_id})
+        let fObj = food.getFood().find(element => {return element._id == foodz[f].food_id})
         console.log(fObj);
-        message += fObj.name + ", Use By: " + food.useBy(foodz[f].createdAt, fObj.duration) + "\n\n"
+        message += fObj.name + ", Use By: " + food.useBy(foodz[f].createdAt, fObj.expiresin) + "\n\n"
     }
     message += "</Message></Response>"
     return message

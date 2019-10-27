@@ -1,23 +1,8 @@
-const food = [
-    {
-        id: 1,
-        name: 'orange',
-        duration: '5 mins'
-    },
-    {
-        id: 2,
-        name: 'apple',
-        duration: '2 mins'
-    },
-    {
-        id: 3,
-        name: 'fish',
-        duration: '5 mins'
-    }
-]
+var food = []
 
 const mongoose = require('mongoose')
 const FoodConnection = require('../models/foodConnection')
+const Foods = require('../models/food')
 
 function addFoodForUser(food_id, user_id, callback) {
     let connectJson = {
@@ -47,7 +32,7 @@ function seeFoodForUser(user_id, callback) {
 }
 
 function remove(name, callback) {
-    let id = food.find(element => {return element.name == name}).id
+    let id = food.find(element => {return element.name == name})._id
     FoodConnection.deleteOne({food_id: id})
     .then(() => {
         callback(true)
@@ -72,5 +57,23 @@ function useBy(start, duration) {
     return start
 }
 
+function loadFood() {
+    return new Promise((resolve, reject) => {
+        Foods.find({})
+        .then(result => {
+            food = result
+            resolve()
+        })
+        .catch((error) => {
+            console.log(error);
+            reject()
+        })
+    })
+}
 
-module.exports = {food, addFoodForUser, seeFoodForUser, useBy, remove}
+function getFood() {
+    return food
+}
+
+
+module.exports = {getFood, addFoodForUser, seeFoodForUser, useBy, remove, loadFood}
