@@ -1,5 +1,8 @@
 const superagent = require('superagent')
 const config = require('../../config.js')
+const food = require('./food')
+
+const user_id = 1
 
 function message(req, res) {
     res.status(200)
@@ -8,8 +11,35 @@ function message(req, res) {
     .then(response => {
         let intent = selectIntent(response.entities)
         let value = getValueForIntent(intent, response.entities)
-        let mess = createMessage(intent, value)
-        res.send(createMessage(intent, value))
+        if (intent == "add") {
+            let food_id = food.food.find(element => {return element.name == value}).id
+            food.addFoodForUser(food_id, user_id, success => {
+                if (success) {
+                    res.send(createMessage(intent, value))
+                } else {
+                    res.send(createMessage("error"))
+                }
+            })
+        } else if (intent == "show") {
+            food.seeFoodForUser(user_id, foodz => {
+                if (foodz) {
+                    res.send(showMessage(foodz))
+                } else {
+                    res.send(createMessage("error"))
+                }
+            })
+        } else if (intent == "delete") {
+            food.remove(value, success => {
+                if(success) {
+                    res.send(createMessage(intent, value))
+                } else {
+                    res.send(createMessage("error"))
+                }
+            })
+        } else {
+            let mess = createMessage(intent, value)
+            res.send(createMessage(intent, value))
+        }
     }, error => {
         console.log(error);
     })
@@ -33,7 +63,6 @@ function decideMessageMeaning(message) {
 }
 
 function selectIntent(entities) {
-    console.log(entities);
     if (entities.add) {
         return "add"
     } else if (entities.show) {
@@ -47,11 +76,13 @@ function selectIntent(entities) {
 
 function createMessage(intent, value) {
     if (intent == "add") {
-        return "<Response><Message>It sounds like you'd like to add a " + value + "</Message></Response>"
+        return "<Response><Message>Successfully added " + value + " to your inventory</Message></Response>"
     } else if (intent == "show") {
         return "<Response><Message>It sounds like you'd like to see all of your food</Message></Response>"
     } else if (intent == "delete") {
-        return "<Response><Message>It sounds like you'd like to remove your " + value + "</Message></Response>"
+        return "<Response><Message>Successfully removed " + value + " from your inventory</Message></Response>"
+    } else if (intent == "error") {
+        return "<Response><Message>Sorry there was an error</Message></Response>"
     } else {
         return "<Response><Message>I'm sorry I didn't understand. Try again?</Message></Response>"
     }
@@ -64,5 +95,19 @@ function getValueForIntent(intent, entities) {
         return entities.delete[0].value
     }
 }
+
+function showMessage(foodz) {
+    console.log("here");
+    var message = "<Response><Message>Here's all the food I have on record for you:\n\n"
+    for (f in foodz) {
+        console.log(foodz[f]);
+        let fObj = food.food.find(element => {return element.id == foodz[f].food_id})
+        console.log(fObj);
+        message += fObj.name + ", Use By: " + food.useBy(foodz[f].createdAt, fObj.duration) + "\n\n"
+    }
+    message += "</Message></Response>"
+    return message
+}
+
 
 module.exports = {message}
