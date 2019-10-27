@@ -6,10 +6,19 @@
 
 <style>
 .container {
+  right: 0.15vw;
   width: 98vw;
   height: 96vh;
-  position: relative;
+  position: absolute;
   border: 12px solid #0b610c;
+}
+
+input {
+  padding: 8px;
+}
+
+button {
+  padding: 8px;
 }
 
 body {
@@ -31,10 +40,10 @@ body {
 	Keeping all your food in date</h2>
 	
 	<label for="firstName"><b>First Name</b></label>
-    <input id="firstName" type="text" placeholder="Enter First Name" name="firstName" required>
+    <input id="firstName" type="text" placeholder="First Name" name="firstName" required>
 		
 	<label for="phoneNumber"><b>Phone Number</b></label>
-    <input id="phoneNumber" type="text" placeholder="Enter Phone Number name" name="phoneNumber" required>
+    <input id="phoneNumber" type="text" placeholder="Phone Number" name="phoneNumber" required>
 	
 	<button type="button" id="signUp" onclick="signUp(firstName, phoneNumber)">Sign Up</button>
 	
@@ -56,8 +65,6 @@ body {
 		if ((firstName == "") || (phoneNumber == "")) {
 			window.alert("Please enter a first name and phone number");
 		} else {
-			window.alert("Hello " + firstName + ", we have sent a code to the number " + phoneNumber + " please reply with 'OK' to confirm sign up");
-
 			$.ajax({
 				method: 'post',
 				data: JSON.stringify({
@@ -69,6 +76,8 @@ body {
 					console.log(result)
 				}
 			});
+			
+			window.location.href = 'thank-you?firstName=' + firstName.split(" ")[0] + "&number=" + phoneNumber;
 		}
 	}
 	</script>
